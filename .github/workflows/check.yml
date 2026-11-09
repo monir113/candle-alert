@@ -12,4 +12,3 @@ jobs:
       - run: python check.py
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
-          TG_CHAT: ${{ secrets.TG_CHAT }}
