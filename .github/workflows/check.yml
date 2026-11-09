@@ -1,14 +1,22 @@
 name: candle-check
+
 on:
-  schedule:
-    - cron: "*/15 * * * *"
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: candle-check
+  cancel-in-progress: false
+
 jobs:
-  run:
+  check:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
-      - run: pip install requests
-      - run: python check.py
+      - name: Run check
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
+        run: python3 check.py
