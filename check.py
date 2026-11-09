@@ -1,10 +1,17 @@
 import os, requests
 
-SYMBOLS = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]  # tomar coin gulo
-TOKEN = os.environ["TG_TOKEN"]
-CHAT = os.environ["TG_CHAT"]
+SYMBOLS = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+TOKEN = os.environ["TG_TOKEN"].strip().strip("<>").strip()
+if TOKEN.lower().startswith("bot"):
+    TOKEN = TOKEN[3:]
+CHAT = os.environ["TG_CHAT"].strip()
 M15 = 15 * 60 * 1000
 M45 = 45 * 60 * 1000
+
+# diagnostic (token dekhay na)
+print("token length:", len(TOKEN), "| colons:", TOKEN.count(":"), "| starts with digit:", TOKEN[:1].isdigit())
+print("chat id is number:", CHAT.lstrip("-").isdigit(), "| chat length:", len(CHAT))
+print("getMe:", requests.get(f"https://api.telegram.org/bot{TOKEN}/getMe").status_code)
 
 def tg(msg):
     r = requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage",
