@@ -9,6 +9,7 @@ M45 = 45 * 60 * 1000
 def tg(msg):
     requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage",
                   data={"chat_id": CHAT, "text": msg})
+    tg("test ok")
 
 for s in SYMBOLS:
     r = requests.get("https://data-api.binance.vision/api/v3/klines",
