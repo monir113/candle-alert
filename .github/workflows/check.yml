@@ -1,4 +1,4 @@
-name: candle-check
+name: Crypto 45m Candle Alert
 
 on:
   workflow_dispatch:
@@ -7,16 +7,25 @@ permissions:
   contents: read
 
 concurrency:
-  group: candle-check
+  group: crypto-candle-alert
   cancel-in-progress: false
 
 jobs:
-  check:
+  candle-alert:
+    name: Check Crypto Candles
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Run check
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run candle alert
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
-        run: python3 check.py
+        run: python check.py
