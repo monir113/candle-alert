@@ -1,19 +1,22 @@
-import os, requests
+import os, re, requests
 
 SYMBOLS = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
-TOKEN = os.environ["TG_TOKEN"].strip()
-CHAT = os.environ["TG_CHAT"].strip()
+CHAT = "7027061012"
 M15 = 15 * 60 * 1000
 M45 = 45 * 60 * 1000
 
-print("token length:", len(TOKEN), "| colons:", TOKEN.count(":"), "| starts with digit:", TOKEN[:1].isdigit())
-print("chat id is number:", CHAT.lstrip("-").isdigit(), "| chat length:", len(CHAT))
+raw = os.environ.get("TG_TOKEN", "")
+m = re.search(r"\d{8,12}:[A-Za-z0-9_-]{30,}", raw)
+if not m:
+    raise SystemExit(f"TG_TOKEN secret e valid token nai (secret length: {len(raw)})")
+TOKEN = m.group(0)
+print("token ok, length:", len(TOKEN))
 print("getMe:", requests.get(f"https://api.telegram.org/bot{TOKEN}/getMe").status_code)
 
 def tg(msg):
     r = requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage",
                       data={"chat_id": CHAT, "text": msg})
-    print(r.status_code, r.text)
+    print(r.status_code, r.text[:80])
 
 tg("test ok")
 
