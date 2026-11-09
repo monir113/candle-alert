@@ -1,6 +1,6 @@
 import os, re, requests
 
-SYMBOLS = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+SYMBOLS = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]  # tomar coin gulo
 CHAT = "7027061012"
 M15 = 15 * 60 * 1000
 M45 = 45 * 60 * 1000
@@ -8,17 +8,12 @@ M45 = 45 * 60 * 1000
 raw = os.environ.get("TG_TOKEN", "")
 m = re.search(r"\d{8,12}:[A-Za-z0-9_-]{30,}", raw)
 if not m:
-    raise SystemExit(f"TG_TOKEN secret e valid token nai (secret length: {len(raw)})")
+    raise SystemExit("TG_TOKEN secret e valid token nai")
 TOKEN = m.group(0)
-print("token ok, length:", len(TOKEN))
-print("getMe:", requests.get(f"https://api.telegram.org/bot{TOKEN}/getMe").status_code)
 
 def tg(msg):
-    r = requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage",
-                      data={"chat_id": CHAT, "text": msg})
-    print(r.status_code, r.text[:80])
-
-tg("test ok")
+    requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage",
+                  data={"chat_id": CHAT, "text": msg})
 
 for s in SYMBOLS:
     r = requests.get("https://data-api.binance.vision/api/v3/klines",
